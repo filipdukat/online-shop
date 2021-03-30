@@ -2,11 +2,9 @@ package com.onlineshop.domain;
 
 import org.springframework.data.annotation.PersistenceConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Objects;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Entity
 @Table(name = "products")
@@ -15,13 +13,54 @@ public class Product {
     @GeneratedValue
     private int id;
     private String name;
+    private BigDecimal price;
+    private String imageURL;
+    @ElementCollection
+    private List<String> attributes;
+    private double rating;
+    private String review;
+
+
 
     @PersistenceConstructor
     private Product() {
     }
 
-    public Product(String name) {
+    public Product(String name, BigDecimal price, String imageURL, List<String> attributes, double rating, String review) {
         this.name = name;
+        this.price = price;
+        this.imageURL = imageURL;
+        this.attributes = attributes;
+        this.rating = rating;
+        this.review = review;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public List<String> getAttributes() {
+        return attributes;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public String getReview() {
+        return review;
     }
 
     @Override
@@ -29,6 +68,11 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", price=" + price +
+                ", imageURL='" + imageURL + '\'' +
+                ", attributes=" + attributes +
+                ", rating=" + rating +
+                ", review='" + review + '\'' +
                 '}';
     }
 
