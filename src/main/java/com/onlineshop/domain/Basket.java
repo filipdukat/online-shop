@@ -6,6 +6,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 
@@ -16,6 +17,7 @@ public class Basket {
     private int id;
     @ElementCollection
     private Map<Product, Integer> products;
+    private String couponCode;
 
     @PersistenceConstructor
     public Basket() {
@@ -33,8 +35,33 @@ public class Basket {
         return products;
     }
 
-    public void addProduct(Product product){
-        products.put(product,1);
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public void addProduct(Product product, int quantity){
+
+        if(quantity<=0){
+            throw new IllegalArgumentException("Quantity should be greater than 0.");
+        }
+
+        if(products.containsKey(product)){
+            products.put(product,quantity + products.get(product));
+        }else{
+            products.put(product,quantity);
+        }
+    }
+
+    public double getPrice(){
+        BigDecimal price = BigDecimal.ZERO;
+        for (Product product : products.keySet()) {
+            price = price.add(product.getPrice().multiply(BigDecimal.valueOf(products.get(product))));
+        }
+        return price.doubleValue();
     }
 
     @Override
@@ -42,6 +69,7 @@ public class Basket {
         return "Basket{" +
                 "id=" + id +
                 ", products=" + products +
+                ", couponCode='" + couponCode + '\'' +
                 '}';
     }
 
@@ -51,11 +79,12 @@ public class Basket {
         if (o == null || getClass() != o.getClass()) return false;
         Basket basket = (Basket) o;
         return id == basket.id &&
-                products.equals(basket.products);
+                products.equals(basket.products) &&
+                couponCode.equals(basket.couponCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, products);
+        return Objects.hash(id, products, couponCode);
     }
 }

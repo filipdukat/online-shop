@@ -20,8 +20,6 @@ public class Product {
     private double rating;
     private String review;
 
-
-
     @PersistenceConstructor
     private Product() {
     }

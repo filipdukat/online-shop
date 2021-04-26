@@ -37,15 +37,23 @@ public class BasketService {
                 .map(basket -> BasketDTO.builder()  // Optional<BasketDTO>
                         .id(basket.getId())
                         .products(basket.getProducts())
+                        .couponCode(basket.getCouponCode())
+                        .price(basket.getPrice())
                         .build())
                 .orElseThrow(); // zwroc BasketDTO lub wyjetek
 
     }
 
-    public void add(int basketId, int productId){
+    public void add(int basketId, int productId, int quantity){
         Basket basket = basketRepository.findById(basketId).orElseThrow();
         Product product = productRepository.findById(productId).orElseThrow();
-        basket.addProduct(product);
+        basket.addProduct(product, quantity);
+        basketRepository.save(basket);
+    }
+
+    public void useCouponCode(int basketId, String couponId){
+        Basket basket = basketRepository.findById(basketId).orElseThrow();
+        basket.setCouponCode(couponId);
         basketRepository.save(basket);
     }
 
