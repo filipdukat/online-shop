@@ -40,7 +40,7 @@ public class BasketService {
                         .couponCode(basket.getCouponCode())
                         .price(basket.getPrice())
                         .build())
-                .orElseThrow(); // zwroc BasketDTO lub wyjetek
+                .orElseThrow(); // zwroc BasketDTO lub wyjatek
 
     }
 
