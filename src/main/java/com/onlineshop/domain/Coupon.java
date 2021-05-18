@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -15,7 +16,7 @@ import java.util.Objects;
 public class Coupon {
     @Id
     private String id;
-    private double discount;
+    private BigDecimal discount;
     @Column(name = "start_date")
     private LocalDate startDate;
     @Column(name = "discount_duration_in_days")
@@ -27,15 +28,19 @@ public class Coupon {
 
     public Coupon(String id, double discount, LocalDate startDate, int discountDurationInDays) {
         this.id = id;
-        this.discount = discount;
+        this.discount = new BigDecimal(discount);
         this.startDate = startDate;
         this.discountDurationInDays = discountDurationInDays;
+    }
+
+    public BigDecimal applyCoupon(BigDecimal price){
+        return price.subtract(price.multiply(discount));
     }
 
     public CouponDTO toDTO(){
         return CouponDTO.builder()
                 .id(id)
-                .discount(discount)
+                .discount(discount.doubleValue())
                 .discountDurationInDays(discountDurationInDays)
                 .startDate(startDate)
                 .endDate(getEndDate())
@@ -51,7 +56,7 @@ public class Coupon {
     }
 
     public double getDiscount() {
-        return discount;
+        return discount.doubleValue();
     }
 
     public LocalDate getStartDate() {
@@ -77,10 +82,10 @@ public class Coupon {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coupon coupon = (Coupon) o;
-        return Double.compare(coupon.discount, discount) == 0 &&
-                discountDurationInDays == coupon.discountDurationInDays &&
-                id.equals(coupon.id) &&
-                startDate.equals(coupon.startDate);
+        return discountDurationInDays == coupon.discountDurationInDays &&
+                Objects.equals(id, coupon.id) &&
+                Objects.equals(discount, coupon.discount) &&
+                Objects.equals(startDate, coupon.startDate);
     }
 
     @Override

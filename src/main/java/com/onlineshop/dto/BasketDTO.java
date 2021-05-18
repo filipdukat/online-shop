@@ -12,8 +12,7 @@ import java.util.Map;
 public class BasketDTO {
     private int id;
     private Map<Product, Integer> products;
-    private String couponCode;
+    private CouponDTO coupon;
     private double price;
-
-
+    private double priceAfterDiscount;
 }

@@ -1,26 +1,26 @@
 package com.onlineshop.service;
 
 import com.onlineshop.domain.Basket;
+import com.onlineshop.domain.Coupon;
 import com.onlineshop.domain.Product;
 import com.onlineshop.dto.BasketDTO;
-import com.onlineshop.dto.ProductDTO;
 import com.onlineshop.repository.BasketRepository;
+import com.onlineshop.repository.CouponRepository;
 import com.onlineshop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BasketService {
     private BasketRepository basketRepository;
     private ProductRepository productRepository;
+    private CouponRepository couponRepository;
 
-    public BasketService(BasketRepository basketRepository, ProductRepository productRepository) {
+    public BasketService(BasketRepository basketRepository, ProductRepository productRepository, CouponRepository couponRepository) {
         this.basketRepository = basketRepository;
         this.productRepository = productRepository;
+        this.couponRepository = couponRepository;
     }
 
     @PostConstruct
@@ -37,8 +37,9 @@ public class BasketService {
                 .map(basket -> BasketDTO.builder()  // Optional<BasketDTO>
                         .id(basket.getId())
                         .products(basket.getProducts())
-                        .couponCode(basket.getCouponCode())
-                        .price(basket.getPrice())
+                        .coupon(basket.getCoupon().toDTO())
+                        .price(basket.getPrice().doubleValue())
+                        .priceAfterDiscount(basket.getPriceAfterDiscount().doubleValue())
                         .build())
                 .orElseThrow(); // zwroc BasketDTO lub wyjatek
 
@@ -53,7 +54,8 @@ public class BasketService {
 
     public void useCouponCode(int basketId, String couponId){
         Basket basket = basketRepository.findById(basketId).orElseThrow();
-        basket.setCouponCode(couponId);
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow();
+        basket.setCoupon(coupon);
         basketRepository.save(basket);
     }
 

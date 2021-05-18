@@ -23,7 +23,6 @@ public class CouponController {
     private List<CouponDTO> getAllCoupons(){
         return null;
 
-        //todo adding coupon
         //todo using coupon in basket
     }
 
