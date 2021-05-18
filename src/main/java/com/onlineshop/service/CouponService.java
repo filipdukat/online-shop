@@ -18,7 +18,9 @@ public class CouponService {
                 couponDTO.getDiscount(),
                 couponDTO.getStartDate(),
                 couponDTO.getDiscountDurationInDays());
-        couponRepository.save(coupon);
-        return couponDTO;
+        Coupon createdCoupon = couponRepository.save(coupon);
+
+        return createdCoupon.toDTO();
     }
+
 }

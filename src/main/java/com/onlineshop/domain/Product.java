@@ -14,6 +14,7 @@ public class Product {
     private int id;
     private String name;
     private BigDecimal price;
+    @Column(name = "image_URL")
     private String imageURL;
     @ElementCollection
     private List<String> attributes;

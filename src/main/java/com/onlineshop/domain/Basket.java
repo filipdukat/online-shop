@@ -2,21 +2,20 @@ package com.onlineshop.domain;
 
 import org.springframework.data.annotation.PersistenceConstructor;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 
 @Entity
+@Table(name = "baskets")
 public class Basket {
     @Id
     @GeneratedValue
     private int id;
     @ElementCollection
     private Map<Product, Integer> products;
+    @Column(name = "coupon_code")
     private String couponCode;
 
     @PersistenceConstructor

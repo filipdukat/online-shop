@@ -33,5 +33,7 @@ public class CouponController {
         return ResponseEntity.ok(result);
     }
 
+    //todo pobierz wszystkie kupony - get mapping
+    //todo skasuj wybrany kupon podajac jego id - delete mapping
 
 }
